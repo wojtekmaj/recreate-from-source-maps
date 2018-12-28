@@ -1,4 +1,9 @@
 const fs = require('fs');
+const _ = require('lodash');
+
+const warnAboutSourceMapsWithoutSourcesContent = _.once(() => {
+  console.warn('Source maps without sourcesContent are not supported');
+});
 
 module.exports = mapPath => new Promise((resolve) => {
   const textContent = fs.readFileSync(mapPath, 'utf8');
@@ -8,7 +13,7 @@ module.exports = mapPath => new Promise((resolve) => {
   const files = {};
   json.sources.forEach((rawSource, sourceIndex) => {
     if (!json.sourcesContent) {
-      console.warn('Source maps without sourcesContent are not supported');
+      warnAboutSourceMapsWithoutSourcesContent();
       return;
     }
 

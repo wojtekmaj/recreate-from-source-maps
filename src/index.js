@@ -1,12 +1,12 @@
+const _ = require('lodash');
 const getBundlesFromHtml = require('./get_bundles_from_html');
+const extractFilesFromBundles = require('./extract_files_from_bundles');
 
-const getBundlesFromHtmls = async (urls) => {
-  if (Array.isArray(urls)) {
-    await Promise.all(urls.map(getBundlesFromHtml));
-  } else {
-    await getBundlesFromHtml(urls);
-  }
-  console.log('All done!');
+const getProjectFromHtmls = async (urls) => {
+  const urlsEnsuredArray = [].concat(urls);
+  const bundleUrls = [].concat(...await Promise.all(urlsEnsuredArray.map(getBundlesFromHtml)));
+  const uniqueBundleUrls = _.uniq(bundleUrls);
+  await extractFilesFromBundles(uniqueBundleUrls);
 };
 
-module.exports = getBundlesFromHtmls;
+module.exports = getProjectFromHtmls;
