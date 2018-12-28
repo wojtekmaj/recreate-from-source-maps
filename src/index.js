@@ -11,7 +11,7 @@ const getProjectFromHtmls = async (urls) => {
   const uniqueBundleUrls = _.uniq(bundleUrls);
   await extractFilesFromBundles(uniqueBundleUrls);
 
-  console.log(chalk`{bgGreen Success}`);
+  console.log(chalk`{bgGreen.black Success}`);
 };
 
 module.exports = getProjectFromHtmls;

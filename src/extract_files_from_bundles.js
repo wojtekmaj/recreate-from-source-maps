@@ -3,13 +3,14 @@ const getMap = require('./get_map');
 const extractFilesFromMap = require('./extract_files_from_map');
 const writeFiles = require('./write_files');
 const extractNodeModules = require('./extract_node_modules');
+const { makeProgress } = require('./log');
 
 const extractFilesFromBundles = async (bundleUrls) => {
-  console.log('Getting bundles...');
+  const gettingBundles = makeProgress('Getting bundles');
   const scriptsContent = await Promise.all(bundleUrls.map(httpsGet));
-  console.log('Getting bundles... Done');
+  gettingBundles.done();
 
-  console.log('Finding sourceMapURLs...');
+  const findingSourceMapUrls = makeProgress('Finding sourceMapURLs');
   const sourceMapUrls = [];
   scriptsContent.forEach((scriptContent, scriptIndex) => {
     const scriptUrl = bundleUrls[scriptIndex];
@@ -19,24 +20,24 @@ const extractFilesFromBundles = async (bundleUrls) => {
       sourceMapUrls.push(new URL(sourceMapName, scriptUrl).toString());
     }
   });
-  console.log('Finding sourceMapURLs... Done');
+  findingSourceMapUrls.done();
 
-  console.log('Downloading source maps...');
+  const downloadingSourceMaps = makeProgress('Downloading source maps');
   const sourceMapPaths = await Promise.all(sourceMapUrls.map(getMap));
-  console.log('Downloading source maps... Done');
+  downloadingSourceMaps.done();
 
-  console.log('Extracting files from source maps...');
+  const extractingFiles = makeProgress('Extracting files from source maps');
   const unmergedFiles = await Promise.all(sourceMapPaths.map(extractFilesFromMap));
   const files = unmergedFiles.reduce((obj, newFiles) => ({ ...obj, ...newFiles }), {});
-  console.log('Extracting files from source maps... Done');
+  extractingFiles.done();
 
-  console.log('Writing all files...');
+  const writingAllFiles = makeProgress('Writing all files');
   await writeFiles(files);
-  console.log('Writing all files... Done');
+  writingAllFiles.done();
 
-  console.log('Extracting node modules...');
+  const extractingModules = makeProgress('Extracting node modules');
   await extractNodeModules(files);
-  console.log('Extracting node modules... Done');
+  extractingModules.done();
 };
 
 module.exports = extractFilesFromBundles;

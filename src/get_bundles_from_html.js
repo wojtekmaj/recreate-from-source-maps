@@ -1,14 +1,15 @@
 const httpsGet = require('./https_get');
 const findScriptUrls = require('./find_script_urls');
+const { makeProgress } = require('./log');
 
 const getBundlesFromHtml = async (url) => {
-  console.log('Getting HTML...');
+  const gettingHtml = makeProgress('Getting HTML');
   const html = await httpsGet(url);
-  console.log('Getting HTML... Done');
+  gettingHtml.done();
 
-  console.log('Finding bundles...');
+  const findingBundles = makeProgress('Finding bundles');
   const scriptUrls = findScriptUrls(url, html);
-  console.log('Finding bundles... Done');
+  findingBundles.done();
 
   return scriptUrls;
 };
