@@ -1,4 +1,7 @@
+const { makeProgress } = require('./log');
+
 const getBundlesFromBootstrap = async (bootstrap, scriptUrl) => {
+  const findingBundles = makeProgress('Finding bundles');
   const beginOfFunction = '\t// script path function';
   const jsonpScriptSrcBody = bootstrap.slice(bootstrap.indexOf(beginOfFunction)).split('\n').slice(1, 4).join('\n');
   const configLine = jsonpScriptSrcBody
@@ -22,6 +25,8 @@ const getBundlesFromBootstrap = async (bootstrap, scriptUrl) => {
   const chunkIds = Object.keys(config);
   const bundleFilenames = chunkIds.map(jsonpScriptSrc); // eslint-disable-line no-undef
   const bundleUrls = bundleFilenames.map(bundleUrl => new URL(bundleUrl, scriptUrl).toString());
+  findingBundles.done(`Found ${bundleUrls.length} bundles.`);
+
   return bundleUrls;
 };
 
