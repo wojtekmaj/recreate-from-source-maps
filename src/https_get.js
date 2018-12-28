@@ -25,6 +25,11 @@ const httpsGet = url => new Promise((resolve, reject) => {
     };
 
     https.get(options, (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`Request failed. Status code: ${res.statusCode}`));
+        return;
+      }
+
       res.setEncoding('utf8');
       let body = '';
       res.on('data', (chunk) => { body += chunk; });
