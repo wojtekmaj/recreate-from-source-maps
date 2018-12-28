@@ -13,7 +13,7 @@ const getProjectFromHtmls = async (projectName, urls) => {
     try {
       for (let i = 0; i < urlsEnsuredArray.length; i += 1) {
         // eslint-disable-next-line no-await-in-loop
-        const bundleUrlsPiece = await getBundlesFromHtml(urlsEnsuredArray[i]);
+        const bundleUrlsPiece = await getBundlesFromHtml(projectName, urlsEnsuredArray[i]);
         if (bundleUrlsPiece) {
           bundleUrls.push(...bundleUrlsPiece);
         }

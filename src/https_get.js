@@ -3,9 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
 
-const httpsGet = url => new Promise((resolve, reject) => {
+const httpsGet = (url, projectName) => new Promise((resolve, reject) => {
   const fileName = url.split('/').pop() || '___root___';
-  const cachePath = path.join('.cache', fileName);
+  const cachePath = path.join('.cache', projectName, fileName);
   const cacheDir = path.join(...cachePath.split('/').slice(0, -1));
   if (!fs.existsSync(cacheDir)) {
     mkdirp.sync(cacheDir);
