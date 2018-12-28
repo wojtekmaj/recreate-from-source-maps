@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
 
-const appendDependenciesInPackageJson = (property, dependency, version) => {
+const appendDependenciesInPackageJson = (projectName, property, dependency, version) => {
   const packageJsonPath = path.join('results', 'package.json');
   const packageJsonDir = 'results';
   if (!fs.existsSync(packageJsonDir)) {
@@ -15,7 +15,7 @@ const appendDependenciesInPackageJson = (property, dependency, version) => {
     packageJson = JSON.parse(existingPackageJson);
   } catch (err) {
     packageJson = {
-      name: 'recreated-project',
+      name: projectName,
       version: '',
       dependencies: {},
       devDependencies: {},
@@ -29,8 +29,8 @@ const appendDependenciesInPackageJson = (property, dependency, version) => {
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, '  '));
 };
 
-const addDependencyInPackageJson = (dependency, version) => appendDependenciesInPackageJson('dependencies', dependency, version);
-const addDevDependencyInPackageJson = (dependency, version) => appendDependenciesInPackageJson('devDependencies', dependency, version);
+const addDependencyInPackageJson = (projectName, dependency, version) => appendDependenciesInPackageJson(projectName, 'dependencies', dependency, version);
+const addDevDependencyInPackageJson = (projectName, dependency, version) => appendDependenciesInPackageJson(projectName, 'devDependencies', dependency, version);
 
 module.exports = {
   addDependencyInPackageJson,

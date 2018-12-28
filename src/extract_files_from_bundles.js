@@ -5,7 +5,7 @@ const writeFiles = require('./write_files');
 const extractNodeModules = require('./extract_node_modules');
 const { makeProgress } = require('./log');
 
-const extractFilesFromBundles = async (bundleUrls) => {
+const extractFilesFromBundles = async (projectName, bundleUrls) => {
   const gettingBundles = makeProgress('Getting bundles');
   const scriptsContent = await Promise.all(bundleUrls.map(httpsGet));
   gettingBundles.done();
@@ -43,13 +43,13 @@ const extractFilesFromBundles = async (bundleUrls) => {
   writingAllFiles.done();
 
   const extractingModules = makeProgress('Extracting node modules');
-  await extractNodeModules(files);
+  await extractNodeModules(projectName, files);
   extractingModules.done();
 
   if (files['webpack/bootstrap']) {
     console.log('Found Webpack bootstrap file.');
     const secondaryBundleUrls = await getBundlesFromBootstrap(files['webpack/bootstrap'], bundleUrls[0]);
-    await extractFilesFromBundles(secondaryBundleUrls);
+    await extractFilesFromBundles(projectName, secondaryBundleUrls);
   }
 };
 
