@@ -48,7 +48,7 @@ const extractFilesFromBundles = async (projectName, bundleUrls) => {
   extractingFiles.done(`Extracted ${Object.keys(files).length} files.`);
 
   const writingAllFiles = makeProgress('Writing all files');
-  await writeFiles(files);
+  await writeFiles(files, projectName);
   writingAllFiles.done();
 
   const extractingModules = makeProgress('Extracting node modules');

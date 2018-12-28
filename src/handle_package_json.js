@@ -3,7 +3,7 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 
 const appendDependenciesInPackageJson = (projectName, property, dependency, version) => {
-  const packageJsonPath = path.join('results', 'package.json');
+  const packageJsonPath = path.join('results', projectName, 'package.json');
   const packageJsonDir = 'results';
   if (!fs.existsSync(packageJsonDir)) {
     mkdirp.sync(packageJsonDir);
