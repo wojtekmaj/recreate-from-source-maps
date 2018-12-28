@@ -38,12 +38,6 @@ const extractFilesFromBundles = async (bundleUrls) => {
   }, {});
   extractingFiles.done();
 
-  if (files['webpack/bootstrap']) {
-    console.log('Found Webpack bootstrap file.');
-    const secondaryBundleUrls = await getBundlesFromBootstrap(files['webpack/bootstrap'], bundleUrls[0]);
-    await extractFilesFromBundles(secondaryBundleUrls);
-  }
-
   const writingAllFiles = makeProgress('Writing all files');
   await writeFiles(files);
   writingAllFiles.done();
@@ -51,6 +45,12 @@ const extractFilesFromBundles = async (bundleUrls) => {
   const extractingModules = makeProgress('Extracting node modules');
   await extractNodeModules(files);
   extractingModules.done();
+
+  if (files['webpack/bootstrap']) {
+    console.log('Found Webpack bootstrap file.');
+    const secondaryBundleUrls = await getBundlesFromBootstrap(files['webpack/bootstrap'], bundleUrls[0]);
+    await extractFilesFromBundles(secondaryBundleUrls);
+  }
 };
 
 module.exports = extractFilesFromBundles;
