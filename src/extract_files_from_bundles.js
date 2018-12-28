@@ -28,7 +28,14 @@ const extractFilesFromBundles = async (bundleUrls) => {
 
   const extractingFiles = makeProgress('Extracting files from source maps');
   const unmergedFiles = await Promise.all(sourceMapsContent.map(extractFilesFromMap));
-  const files = unmergedFiles.reduce((obj, newFiles) => ({ ...obj, ...newFiles }), {});
+  const files = unmergedFiles.reduce((obj, newFiles) => {
+    const existingFiles = Object.keys(newFiles)
+      .filter(newFile => obj[newFile] && obj[newFile] !== newFiles[newFile]);
+    if (existingFiles.length) {
+      console.warn(`The following files will be overwritten with different content: ${existingFiles.join(', ')}.`);
+    }
+    return { ...obj, ...newFiles };
+  }, {});
   extractingFiles.done();
 
   if (files['webpack/bootstrap']) {
