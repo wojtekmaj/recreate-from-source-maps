@@ -30,7 +30,7 @@ const error = (msg = '') => {
   if (actionsPending) {
     process.stdout.write('\n    ');
   }
-  process.stdout.write(chalk`{bgRed.black Error} ${msg}`);
+  process.stdout.write(chalk`{bgRed.black Error} ${msg}\n`);
   if (!actionsPending) {
     process.stdout.write('\n');
   }
@@ -40,7 +40,7 @@ const success = (msg = '') => {
   if (actionsPending) {
     process.stdout.write('\n    ');
   }
-  process.stdout.write(chalk`{green Success} {dim ${msg}}`);
+  process.stdout.write(chalk`{green Success} {dim ${msg}}\n`);
   if (!actionsPending) {
     process.stdout.write('\n');
   }
@@ -53,12 +53,10 @@ const makeProgress = (title) => {
   return {
     done: (doneMsg) => {
       success(doneMsg);
-      process.stdout.write('\n');
       actionsPending -= 1;
     },
     error: (errorMsg) => {
       error(errorMsg);
-      process.stdout.write('\n');
       actionsPending -= 1;
     },
   };

@@ -7,35 +7,33 @@ const { log, error, success } = require('./log');
 const getProjectFromHtmls = async (projectName, urls) => {
   log(chalk`{bgWhite.black Processing…}\n`);
 
-  let errorHappened = false;
-
-  const urlsEnsuredArray = [].concat(urls);
-  const bundleUrls = [];
   try {
-    for (let i = 0; i < urlsEnsuredArray.length; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
-      bundleUrls.push(...await getBundlesFromHtml(urlsEnsuredArray[i]));
+    const urlsEnsuredArray = [].concat(urls);
+    const bundleUrls = [];
+    try {
+      for (let i = 0; i < urlsEnsuredArray.length; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        const bundleUrlsPiece = await getBundlesFromHtml(urlsEnsuredArray[i]);
+        if (bundleUrlsPiece) {
+          bundleUrls.push(...bundleUrlsPiece);
+        }
+      }
+    } catch (err) {
+      error('Failed to get bundles from provided HTML files.');
+      throw err;
     }
-  } catch (err) {
-    process.stdout.write('\n');
-    error('Failed to get bundles from provided HTML files.');
-    errorHappened = true;
-  }
-  const uniqueBundleUrls = _.uniq(bundleUrls);
-  try {
-    await extractFilesFromBundles(projectName, uniqueBundleUrls);
-  } catch (err) {
-    process.stdout.write('\n');
-    error('Failed to extract files from bundles.');
-    errorHappened = true;
-  }
 
-  process.stdout.write('\n');
+    const uniqueBundleUrls = _.uniq(bundleUrls);
+    try {
+      await extractFilesFromBundles(projectName, uniqueBundleUrls);
+    } catch (err) {
+      error('Failed to extract files from bundles.');
+      throw err;
+    }
 
-  if (errorHappened) {
-    error('Failed to process the data.');
-  } else {
     success('Successfully processed the data.');
+  } catch (err) {
+    error('Failed to process the data.');
   }
 };
 

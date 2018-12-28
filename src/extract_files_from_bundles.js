@@ -12,11 +12,8 @@ const extractFilesFromBundles = async (projectName, bundleUrls) => {
     scriptsContents = await Promise.all(bundleUrls.map(httpsGet));
     gettingBundles.done();
   } catch (err) {
-    gettingBundles.error();
-  }
-
-  if (!scriptsContents) {
-    throw new Error();
+    gettingBundles.error(err);
+    throw err;
   }
 
   const findingSourceMapUrls = makeProgress('Finding sourceMapURLs');
@@ -32,8 +29,14 @@ const extractFilesFromBundles = async (projectName, bundleUrls) => {
   findingSourceMapUrls.done(`Found ${scriptsContents.length === sourceMapUrls.length ? 'all' : sourceMapUrls.length} sourceMapURLs.`);
 
   const downloadingSourceMaps = makeProgress('Downloading source maps');
-  const sourceMapsContent = await Promise.all(sourceMapUrls.map(httpsGet));
-  downloadingSourceMaps.done();
+  let sourceMapsContent;
+  try {
+    sourceMapsContent = await Promise.all(sourceMapUrls.map(httpsGet));
+    downloadingSourceMaps.done();
+  } catch (err) {
+    downloadingSourceMaps.error(err);
+    throw err;
+  }
 
   const extractingFiles = makeProgress('Extracting files from source maps');
   const unmergedFiles = await Promise.all(sourceMapsContent.map(extractFilesFromMap));
