@@ -1,12 +1,11 @@
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 const mkdirp = require('mkdirp');
 
 const httpsGet = url => new Promise((resolve, reject) => {
-  const hash = crypto.createHmac('sha256', '').update(url).digest('hex');
-  const cachePath = path.join('.cache', hash);
+  const fileName = url.split('/').pop();
+  const cachePath = path.join('.cache', fileName);
   const cacheDir = path.join(...cachePath.split('/').slice(0, -1));
   if (!fs.existsSync(cacheDir)) {
     mkdirp.sync(cacheDir);
