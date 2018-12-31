@@ -17,6 +17,9 @@ While source maps make debugging way easier, they are often created when they sh
 ```js
 const recreateProject = require('recreate-from-source-maps');
 
+recreateProject('example-project', 'https://www.example.com/');
+
+// or, if there are many starting bundles
 recreateProject('example-project', [
   'https://www.example.com/',
   'https://www.example.com/some-page-with-code-splitting',
