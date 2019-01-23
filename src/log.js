@@ -3,7 +3,13 @@ const chalk = require('chalk');
 let actionsPending = 0;
 
 const log = (msg = '') => {
-  process.stdout.write(chalk`${msg}\n`);
+  if (actionsPending) {
+    process.stdout.write('\n    ');
+  }
+  process.stdout.write(chalk`${msg}`);
+  if (!actionsPending) {
+    process.stdout.write('\n');
+  }
 };
 
 const info = (msg = '') => {
