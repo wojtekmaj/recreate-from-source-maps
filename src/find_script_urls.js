@@ -3,6 +3,9 @@ const findScriptPaths = scriptTags => scriptTags.map(tag => tag.match(/src="([^"
 const findScriptUrls = (url, html) => {
   const urlObject = new URL(url);
   const scriptTags = findScriptTags(html);
+  if (!scriptTags) {
+    throw new Error('No bundles found.');
+  }
   const scriptPaths = findScriptPaths(scriptTags);
   const scriptUrls = scriptPaths.map(scriptPath => new URL(scriptPath, urlObject).toString());
   return scriptUrls;
