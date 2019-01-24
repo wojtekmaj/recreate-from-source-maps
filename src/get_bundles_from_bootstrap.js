@@ -1,8 +1,4 @@
-const { log, makeProgress } = require('./log');
-
 const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
-  const findingBundles = makeProgress('Finding bundles');
-
   const jsonpScriptSrc = bootstrap.includes('jsonpScriptSrc');
   const scriptSrc = bootstrap.includes('script.src = __webpack_require__.p');
 
@@ -67,7 +63,6 @@ const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
   const bundleUrls = bundleFilenames.map(
     bundleUrl => new URL(bundleUrl, sampleScriptUrl).toString(),
   );
-  findingBundles.done(`Found ${bundleUrls.length} bundles.`);
 
   return bundleUrls;
 };
