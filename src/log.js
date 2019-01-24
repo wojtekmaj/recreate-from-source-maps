@@ -40,15 +40,24 @@ const success = (msg = '') => {
 const makeProgress = (title) => {
   log(`${title}…`);
   actionsPending += 1;
+  let done = false;
 
   return {
     done: (doneMsg) => {
+      if (done) {
+        throw new Error('You can\'t call done() twice');
+      }
       success(doneMsg);
       actionsPending -= 1;
+      done = true;
     },
     error: (errorMsg) => {
+      if (done) {
+        throw new Error('You can\'t call done() twice');
+      }
       error(errorMsg);
       actionsPending -= 1;
+      done = true;
     },
   };
 };
