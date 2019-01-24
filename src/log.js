@@ -4,57 +4,42 @@ let actionsPending = 0;
 
 const log = (msg = '') => {
   if (actionsPending) {
-    process.stdout.write('\n    ');
+    process.stdout.write(`${' '.repeat(actionsPending * 4)}`);
   }
-  process.stdout.write(chalk`${msg}`);
-  if (!actionsPending) {
-    process.stdout.write('\n');
-  }
+  process.stdout.write(chalk`${msg}\n`);
 };
 
 const info = (msg = '') => {
   if (actionsPending) {
-    process.stdout.write('\n    ');
+    process.stdout.write(`${' '.repeat(actionsPending * 4)}`);
   }
-  process.stdout.write(chalk`{bgBlue.white Info} ${msg}`);
-  if (!actionsPending) {
-    process.stdout.write('\n');
-  }
+  process.stdout.write(chalk`{bgBlue.white Info} ${msg}\n`);
 };
 
 const warning = (msg = '') => {
   if (actionsPending) {
-    process.stdout.write('\n    ');
+    process.stdout.write(`${' '.repeat(actionsPending * 4)}`);
   }
-  process.stdout.write(chalk`{bgYellow.black Warning} ${msg}`);
-  if (!actionsPending) {
-    process.stdout.write('\n');
-  }
+  process.stdout.write(chalk`{bgYellow.black Warning} ${msg}\n`);
 };
 
 const error = (msg = '') => {
   if (actionsPending) {
-    process.stdout.write('\n    ');
+    process.stdout.write(`${' '.repeat(actionsPending * 4)}`);
   }
   process.stdout.write(chalk`{bgRed.black Error} ${msg}\n`);
-  if (!actionsPending) {
-    process.stdout.write('\n');
-  }
 };
 
 const success = (msg = '') => {
   if (actionsPending) {
-    process.stdout.write('\n    ');
+    process.stdout.write(`${' '.repeat(actionsPending * 4)}`);
   }
   process.stdout.write(chalk`{green Success} {dim ${msg}}\n`);
-  if (!actionsPending) {
-    process.stdout.write('\n');
-  }
 };
 
 const makeProgress = (title) => {
+  log(`${title}…`);
   actionsPending += 1;
-  process.stdout.write(chalk`${title}… `);
 
   return {
     done: (doneMsg) => {
