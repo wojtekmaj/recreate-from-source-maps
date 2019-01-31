@@ -53,15 +53,7 @@ const extractBootstrapFromBundles = async (projectName, bundleUrls) => {
   }
 
   // On the first pass, the function will try and use extracted data to find even more data
-  let bootstrapFile = files['webpack/bootstrap'];
-  if (!bootstrapFile) {
-    // Sometimes bootstrap file is called "webpack/bootstrap f4db4f391c7f060fcb57" or similar
-    const foundFilename = Object.keys(files).find(filename => filename.startsWith('webpack/bootstrap '));
-    if (foundFilename) {
-      bootstrapFile = files[foundFilename];
-    }
-  }
-
+  const bootstrapFile = files['webpack/bootstrap'];
   if (bootstrapFile) {
     info('Found Webpack bootstrap file.');
     const secondaryBundleUrls = await getBundlesFromBootstrap(bootstrapFile, bundleUrls[0]);

@@ -16,7 +16,13 @@ const extractFilesFromMap = textContent => new Promise((resolve) => {
   // Extract all files
   const files = {};
   json.sources.forEach((rawSource, sourceIndex) => {
-    const fileName = rawSource.split('///').pop();
+    let fileName = rawSource.split('///').pop();
+    if (fileName.includes(' ')) {
+      ([fileName] = fileName.split(' '));
+    }
+    if (fileName.includes('?')) {
+      ([fileName] = fileName.split('?'));
+    }
     const data = json.sourcesContent[sourceIndex];
 
     files[fileName] = data;
