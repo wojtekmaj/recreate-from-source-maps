@@ -11,7 +11,7 @@ const extractFilesFromBundles = async (projectName, bundleUrls) => {
   let allBundleUrls;
   try {
     allBundleUrls = await extractBoostrapFromBundles(projectName, bundleUrls);
-    extractBootstrap.done();
+    extractBootstrap.done(`Found ${bundleUrls.length === allBundleUrls.length ? 'no' : allBundleUrls.length - bundleUrls.length} extra bundles.`);
   } catch (err) {
     extractBootstrap.error(err);
     throw err;
@@ -65,8 +65,13 @@ const extractFilesFromBundles = async (projectName, bundleUrls) => {
   }
 
   const writingAllFiles = makeProgress('Writing all files');
-  await writeFiles(files, projectName);
-  writingAllFiles.done();
+  try {
+    await writeFiles(files, projectName);
+    writingAllFiles.done();
+  } catch (err) {
+    writingAllFiles.error(err);
+    throw err;
+  }
 
   const extractingModules = makeProgress('Extracting node modules');
   const nodeModules = await extractNodeModules(projectName, files);
