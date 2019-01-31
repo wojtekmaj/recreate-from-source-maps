@@ -9,7 +9,7 @@ module.exports = (files, projectName) => new Promise((resolve) => {
       safeFileName = safeFileName.slice(3);
     }
     const filePath = path.join('results', projectName, safeFileName);
-    const fileDir = path.join(...filePath.split('/').slice(0, -1));
+    const fileDir = path.dirname(filePath);
     if (!fs.existsSync(fileDir)) {
       mkdirp.sync(fileDir);
     }

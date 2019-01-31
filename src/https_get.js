@@ -3,10 +3,12 @@ const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
 
+const cacheDirectory = '.cache';
+
 const httpsGet = (url, projectName) => new Promise((resolve, reject) => {
   const fileName = url.split('/').pop() || '___root___';
-  const cachePath = path.join('.cache', projectName, fileName);
-  const cacheDir = path.join(...cachePath.split('/').slice(0, -1));
+  const cachePath = path.join(cacheDirectory, projectName, fileName);
+  const cacheDir = path.dirname(cachePath);
   if (!fs.existsSync(cacheDir)) {
     mkdirp.sync(cacheDir);
   }
