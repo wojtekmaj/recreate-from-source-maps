@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
+const { error } = require('./log');
 
 module.exports = (files, projectName) => new Promise((resolve) => {
   Object.entries(files).forEach(([fileName, data]) => {
@@ -14,7 +15,11 @@ module.exports = (files, projectName) => new Promise((resolve) => {
       mkdirp.sync(fileDir);
     }
 
-    fs.writeFileSync(filePath, data);
+    try {
+      fs.writeFileSync(filePath, data);
+    } catch (err) {
+      error(err);
+    }
   });
 
   resolve();
