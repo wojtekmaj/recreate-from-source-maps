@@ -4,6 +4,10 @@ const getNLinesAfter = (text, after, numberOfLines) => text
   .slice(1, numberOfLines + 1)
   .join('\n');
 
+const getNthLine = (text, lineNumber) => text
+  .split('\n')
+  .slice(lineNumber, lineNumber + 1)[0];
+
 const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
   const jsonpScriptSrc = bootstrap.includes('jsonpScriptSrc');
   const scriptSrc = bootstrap.includes('script.src = __webpack_require__.p');
@@ -12,9 +16,8 @@ const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
     if (jsonpScriptSrc) {
       const beginOfFunction = '\t// script path function';
       const jsonpScriptSrcBody = getNLinesAfter(bootstrap, beginOfFunction, 3);
-      const configLine = jsonpScriptSrcBody
-        .split('\n')
-        .slice(1, -1)[0];
+      const configLine = getNthLine(jsonpScriptSrcBody, 1);
+
       const config = JSON.parse(configLine.slice(configLine.indexOf('{'), configLine.indexOf('}') + 1));
       return Object.keys(config);
     }
