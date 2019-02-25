@@ -72,7 +72,7 @@ const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
 
   const bundleFilenames = chunkIds.map(chunkIdToBundleFilename); // eslint-disable-line no-undef
   const bundleUrls = bundleFilenames.map(
-    bundleUrl => new URL(bundleUrl, sampleScriptUrl).toString(),
+    bundleFilename => new URL(bundleFilename, sampleScriptUrl).toString(),
   );
 
   return bundleUrls;
