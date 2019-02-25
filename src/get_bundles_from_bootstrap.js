@@ -1,3 +1,9 @@
+const getNLinesAfter = (text, after, numberOfLines) => text
+  .slice(text.indexOf(after))
+  .split('\n')
+  .slice(1, numberOfLines + 1)
+  .join('\n');
+
 const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
   const jsonpScriptSrc = bootstrap.includes('jsonpScriptSrc');
   const scriptSrc = bootstrap.includes('script.src = __webpack_require__.p');
@@ -5,7 +11,7 @@ const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
   const chunkIds = (() => {
     if (jsonpScriptSrc) {
       const beginOfFunction = '\t// script path function';
-      const jsonpScriptSrcBody = bootstrap.slice(bootstrap.indexOf(beginOfFunction)).split('\n').slice(1, 4).join('\n');
+      const jsonpScriptSrcBody = getNLinesAfter(bootstrap, beginOfFunction, 3);
       const configLine = jsonpScriptSrcBody
         .split('\n')
         .slice(1, -1)[0];
@@ -23,7 +29,7 @@ const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
 
   const chunkIdToBundleFilename = (() => {
     const beginOfPublicPath = '\t// __webpack_public_path__';
-    const webpackPublicPath = bootstrap.slice(bootstrap.indexOf(beginOfPublicPath)).split('\n').slice(1, 2).join('\n');
+    const webpackPublicPath = getNLinesAfter(bootstrap, beginOfPublicPath, 1);
 
     const __webpack_require__ = {}; // eslint-disable-line
     eval(webpackPublicPath); // eslint-disable-line no-eval
@@ -33,7 +39,7 @@ const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
 
     if (jsonpScriptSrc) {
       const beginOfFunction = '\t// script path function';
-      const jsonpScriptSrcBody = bootstrap.slice(bootstrap.indexOf(beginOfFunction)).split('\n').slice(1, 4).join('\n');
+      const jsonpScriptSrcBody = getNLinesAfter(bootstrap, beginOfFunction, 3);
 
       eval(jsonpScriptSrcBody); // eslint-disable-line no-eval
       if (!jsonpScriptSrc) {
