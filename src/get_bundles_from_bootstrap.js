@@ -9,11 +9,11 @@ const getNthLine = (text, lineNumber) => text
   .slice(lineNumber, lineNumber + 1)[0];
 
 const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
-  const jsonpScriptSrc = bootstrap.includes('jsonpScriptSrc');
-  const scriptSrc = bootstrap.includes('script.src = __webpack_require__.p');
+  const hasJsonpScriptSrc = bootstrap.includes('jsonpScriptSrc');
+  const hasScriptSrc = bootstrap.includes('script.src = __webpack_require__.p');
 
   const chunkIds = (() => {
-    if (jsonpScriptSrc) {
+    if (hasJsonpScriptSrc) {
       const beginOfFunction = '\t// script path function';
       const jsonpScriptSrcBody = getNLinesAfter(bootstrap, beginOfFunction, 3);
       const configLine = getNthLine(jsonpScriptSrcBody, 1);
@@ -22,7 +22,7 @@ const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
       return Object.keys(config);
     }
 
-    if (scriptSrc) {
+    if (hasScriptSrc) {
       // TODO: How to detect that?
       return [];
     }
@@ -40,11 +40,12 @@ const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
       throw new Error('Failed to determine publicPath');
     }
 
-    if (jsonpScriptSrc) {
+    if (hasJsonpScriptSrc) {
       const beginOfFunction = '\t// script path function';
       const jsonpScriptSrcBody = getNLinesAfter(bootstrap, beginOfFunction, 3);
 
       eval(jsonpScriptSrcBody); // eslint-disable-line no-eval
+      /* global jsonpScriptSrc */
       if (!jsonpScriptSrc) {
         throw new Error('Failed to create jsonpScriptSrc function');
       }
@@ -52,12 +53,13 @@ const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
       return jsonpScriptSrc;
     }
 
-    if (scriptSrc) {
+    if (hasScriptSrc) {
       const beginOfLine = 'script.src = __webpack_require__.p';
       const textToCut = 'script.src = ';
       const scriptSrcLine = bootstrap.slice(bootstrap.indexOf(beginOfLine) + textToCut.length).split('\n').slice(0, 1)[0];
 
       eval(`function scriptSrc(chunkId) { return ${scriptSrcLine} }`); // eslint-disable-line no-eval
+      /* global scriptSrc */
       if (!scriptSrc) {
         throw new Error('Failed to create scriptSrc function');
       }
