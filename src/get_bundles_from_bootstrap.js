@@ -1,3 +1,5 @@
+const httpsGet = require('./https_get');
+
 const getNLinesAfter = (text, after, numberOfLines) => text
   .slice(text.indexOf(after))
   .split('\n')
@@ -8,27 +10,9 @@ const getNthLine = (text, lineNumber) => text
   .split('\n')
   .slice(lineNumber, lineNumber + 1)[0];
 
-const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
+const getBundlesFromBootstrap = async (projectName, bootstrap, sampleScriptUrl) => {
   const hasJsonpScriptSrc = bootstrap.includes('jsonpScriptSrc');
   const hasScriptSrc = bootstrap.includes('script.src = __webpack_require__.p');
-
-  const chunkIds = (() => {
-    if (hasJsonpScriptSrc) {
-      const beginOfFunction = '\t// script path function';
-      const jsonpScriptSrcBody = getNLinesAfter(bootstrap, beginOfFunction, 3);
-      const configLine = getNthLine(jsonpScriptSrcBody, 1);
-
-      const config = JSON.parse(configLine.slice(configLine.indexOf('{'), configLine.indexOf('}') + 1));
-      return Object.keys(config);
-    }
-
-    if (hasScriptSrc) {
-      // TODO: How to detect that?
-      return [];
-    }
-
-    return [];
-  })();
 
   const chunkIdToBundleFilename = (() => {
     const beginOfPublicPath = '\t// __webpack_public_path__';
@@ -70,7 +54,42 @@ const getBundlesFromBootstrap = async (bootstrap, sampleScriptUrl) => {
     return null;
   })();
 
-  const bundleFilenames = chunkIds.map(chunkIdToBundleFilename); // eslint-disable-line no-undef
+  const chunkIds = await (async () => {
+    if (hasJsonpScriptSrc) {
+      const beginOfFunction = '\t// script path function';
+      const jsonpScriptSrcBody = getNLinesAfter(bootstrap, beginOfFunction, 3);
+      const configLine = getNthLine(jsonpScriptSrcBody, 1);
+
+      const config = JSON.parse(configLine.slice(configLine.indexOf('{'), configLine.indexOf('}') + 1));
+      return Object.keys(config);
+    }
+
+    if (hasScriptSrc) {
+      /**
+       * No other way to get the number of chunks than just requesting them one by one until
+       * we get an error.
+       */
+      let maxChunkId = 0;
+      let errorOccurred = false;
+      const maxNumberOfChunks = 25;
+      while (maxChunkId < maxNumberOfChunks && !errorOccurred) {
+        try {
+          const bundleFilename = chunkIdToBundleFilename(maxChunkId + 1);
+          const bundleUrl = new URL(bundleFilename, sampleScriptUrl).toString();
+          await httpsGet(bundleUrl, projectName); // eslint-disable-line no-await-in-loop
+          maxChunkId += 1;
+        } catch (error) {
+          errorOccurred = true;
+        }
+      }
+
+      return Array.from(new Array(maxChunkId)).map((el, index) => index + 1);
+    }
+
+    return [];
+  })();
+
+  const bundleFilenames = chunkIds.map(chunkIdToBundleFilename);
   const bundleUrls = bundleFilenames.map(
     bundleFilename => new URL(bundleFilename, sampleScriptUrl).toString(),
   );

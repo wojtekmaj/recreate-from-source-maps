@@ -56,7 +56,11 @@ const extractBootstrapFromBundles = async (projectName, bundleUrls) => {
   const bootstrapFile = files['webpack/bootstrap'];
   if (bootstrapFile) {
     info('Found Webpack bootstrap file.');
-    const secondaryBundleUrls = await getBundlesFromBootstrap(bootstrapFile, bundleUrls[0]);
+    const secondaryBundleUrls = await getBundlesFromBootstrap(
+      projectName,
+      bootstrapFile,
+      bundleUrls[0],
+    );
     return [...bundleUrls, ...secondaryBundleUrls];
   }
 
