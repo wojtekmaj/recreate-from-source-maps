@@ -10,12 +10,14 @@ const getNthLine = (text, lineNumber) => text
   .split('\n')
   .slice(lineNumber, lineNumber + 1)[0];
 
+const beginOfPublicPath = '\t// __webpack_public_path__';
+const beginOfFunction = '\t// script path function';
+
 const getBundlesFromBootstrap = async (projectName, bootstrap, sampleScriptUrl) => {
   const hasJsonpScriptSrc = bootstrap.includes('jsonpScriptSrc');
   const hasScriptSrc = bootstrap.includes('script.src = __webpack_require__.p');
 
   const chunkIdToBundleFilename = (() => {
-    const beginOfPublicPath = '\t// __webpack_public_path__';
     const webpackPublicPath = getNLinesAfter(bootstrap, beginOfPublicPath, 1);
 
     const __webpack_require__ = {}; // eslint-disable-line
@@ -25,7 +27,6 @@ const getBundlesFromBootstrap = async (projectName, bootstrap, sampleScriptUrl) 
     }
 
     if (hasJsonpScriptSrc) {
-      const beginOfFunction = '\t// script path function';
       const jsonpScriptSrcBody = getNLinesAfter(bootstrap, beginOfFunction, 3);
 
       eval(jsonpScriptSrcBody); // eslint-disable-line no-eval
@@ -56,7 +57,6 @@ const getBundlesFromBootstrap = async (projectName, bootstrap, sampleScriptUrl) 
 
   const chunkIds = await (async () => {
     if (hasJsonpScriptSrc) {
-      const beginOfFunction = '\t// script path function';
       const jsonpScriptSrcBody = getNLinesAfter(bootstrap, beginOfFunction, 3);
       const configLine = getNthLine(jsonpScriptSrcBody, 1);
 
