@@ -21,7 +21,7 @@ const getBundlesFromBootstrap = async (projectName, bootstrap, sampleScriptUrl) 
     const __webpack_require__ = {}; // eslint-disable-line
     eval(webpackPublicPath); // eslint-disable-line no-eval
     if (!__webpack_require__.p) {
-      throw new Error('Failed to determine publicPath');
+      throw new Error('Failed to determine publicPath.');
     }
 
     if (hasJsonpScriptSrc) {
