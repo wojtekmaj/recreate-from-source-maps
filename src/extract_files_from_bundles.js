@@ -1,6 +1,6 @@
 const httpsGet = require('./https_get');
 const findSourceMapUrls = require('./find_source_map_urls');
-const extractBoostrapFromBundles = require('./extract_bootstrap_from_bundles');
+const extractBootstrapFromBundles = require('./extract_bootstrap_from_bundles');
 const extractFilesFromMaps = require('./extract_files_from_maps');
 const writeFiles = require('./write_files');
 const extractNodeModules = require('./extract_node_modules');
@@ -10,7 +10,7 @@ const extractFilesFromBundles = async (projectName, bundleUrls) => {
   const extractBootstrap = makeProgress('Extracting Webpack bootstrap file');
   let allBundleUrls;
   try {
-    allBundleUrls = await extractBoostrapFromBundles(projectName, bundleUrls);
+    allBundleUrls = await extractBootstrapFromBundles(projectName, bundleUrls);
     extractBootstrap.done(`Found ${bundleUrls.length === allBundleUrls.length ? 'no' : allBundleUrls.length - bundleUrls.length} extra bundles.`);
   } catch (err) {
     extractBootstrap.error(err);
