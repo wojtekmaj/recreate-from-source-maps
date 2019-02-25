@@ -13,7 +13,11 @@ const getNthLine = (text, lineNumber) => text
 const beginOfPublicPath = '\t// __webpack_public_path__';
 const beginOfFunction = '\t// script path function';
 
-const getBundlesFromBootstrap = async (projectName, bootstrap, sampleScriptUrl) => {
+const getBundlesFromBootstrap = async ({
+  bootstrap,
+  projectName,
+  sampleScriptUrl,
+}) => {
   const hasJsonpScriptSrc = bootstrap.includes('jsonpScriptSrc');
   const hasScriptSrc = bootstrap.includes('script.src = __webpack_require__.p');
 

@@ -6,11 +6,14 @@ const writeFiles = require('./write_files');
 const extractNodeModules = require('./extract_node_modules');
 const { makeProgress } = require('./log');
 
-const extractFilesFromBundles = async (projectName, bundleUrls) => {
+const extractFilesFromBundles = async ({
+  bundleUrls,
+  projectName,
+}) => {
   const extractBootstrap = makeProgress('Extracting Webpack bootstrap file');
   let allBundleUrls;
   try {
-    allBundleUrls = await extractBootstrapFromBundles(projectName, bundleUrls);
+    allBundleUrls = await extractBootstrapFromBundles({ bundleUrls, projectName });
     extractBootstrap.done(`Found ${bundleUrls.length === allBundleUrls.length ? 'no' : allBundleUrls.length - bundleUrls.length} extra bundles.`);
   } catch (err) {
     extractBootstrap.error(err);
@@ -30,7 +33,10 @@ const extractFilesFromBundles = async (projectName, bundleUrls) => {
   const findingSourceMapUrls = makeProgress('Finding sourceMapURLs');
   let sourceMapUrls;
   try {
-    sourceMapUrls = findSourceMapUrls(allBundleUrls, scriptsContents);
+    sourceMapUrls = findSourceMapUrls({
+      bundleUrls: allBundleUrls,
+      scriptsContents,
+    });
     findingSourceMapUrls.done(`Found ${scriptsContents.length === sourceMapUrls.length ? 'all' : sourceMapUrls.length} sourceMapURLs.`);
   } catch (err) {
     findingSourceMapUrls.error(err);
@@ -74,7 +80,10 @@ const extractFilesFromBundles = async (projectName, bundleUrls) => {
   }
 
   const extractingModules = makeProgress('Extracting node modules');
-  const nodeModules = await extractNodeModules(projectName, files);
+  const nodeModules = await extractNodeModules({
+    files,
+    projectName,
+  });
   extractingModules.done(`Extracted ${nodeModules.length} node modules.`);
 };
 

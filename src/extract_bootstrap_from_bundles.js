@@ -4,7 +4,10 @@ const extractFilesFromMaps = require('./extract_files_from_maps');
 const getBundlesFromBootstrap = require('./get_bundles_from_bootstrap');
 const { info, makeProgress } = require('./log');
 
-const extractBootstrapFromBundles = async (projectName, bundleUrls) => {
+const extractBootstrapFromBundles = async ({
+  bundleUrls,
+  projectName,
+}) => {
   const gettingBundles = makeProgress('Getting bundles');
   let scriptsContents;
   try {
@@ -18,7 +21,10 @@ const extractBootstrapFromBundles = async (projectName, bundleUrls) => {
   const findingSourceMapUrls = makeProgress('Finding sourceMapURLs');
   let sourceMapUrls;
   try {
-    sourceMapUrls = findSourceMapUrls(bundleUrls, scriptsContents);
+    sourceMapUrls = findSourceMapUrls({
+      bundleUrls,
+      scriptsContents,
+    });
     findingSourceMapUrls.done(`Found ${scriptsContents.length === sourceMapUrls.length ? 'all' : sourceMapUrls.length} sourceMapURLs.`);
   } catch (err) {
     findingSourceMapUrls.error(err);
@@ -56,11 +62,11 @@ const extractBootstrapFromBundles = async (projectName, bundleUrls) => {
   const bootstrapFile = files['webpack/bootstrap'];
   if (bootstrapFile) {
     info('Found Webpack bootstrap file.');
-    const secondaryBundleUrls = await getBundlesFromBootstrap(
+    const secondaryBundleUrls = await getBundlesFromBootstrap({
+      bootstrap: bootstrapFile,
       projectName,
-      bootstrapFile,
-      bundleUrls[0],
-    );
+      sampleScriptUrl: bundleUrls[0],
+    });
     return [...bundleUrls, ...secondaryBundleUrls];
   }
 

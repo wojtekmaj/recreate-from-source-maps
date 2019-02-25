@@ -2,7 +2,10 @@ const httpsGet = require('./https_get');
 const findScriptUrls = require('./find_script_urls');
 const { makeProgress } = require('./log');
 
-const getBundlesFromHtml = async (projectName, url) => {
+const getBundlesFromHtml = async ({
+  projectName,
+  url,
+}) => {
   const gettingHtml = makeProgress(`Getting source from URL ${url}`);
   let html;
   try {
@@ -16,7 +19,7 @@ const getBundlesFromHtml = async (projectName, url) => {
   let scriptUrls;
   const findingBundles = makeProgress('Finding bundles');
   try {
-    scriptUrls = findScriptUrls(url, html);
+    scriptUrls = findScriptUrls({ html, url });
     findingBundles.done(`Found ${scriptUrls.length} bundles.`);
   } catch (err) {
     findingBundles.error(err);

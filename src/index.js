@@ -4,7 +4,7 @@ const getBundlesFromHtml = require('./get_bundles_from_html');
 const extractFilesFromBundles = require('./extract_files_from_bundles');
 const { log, error, success } = require('./log');
 
-const getProjectFromHtmls = async (projectName, urls) => {
+const recreateFromSourceMaps = async (projectName, urls) => {
   log(chalk`{bgWhite.black Processing…}\n`);
 
   try {
@@ -13,7 +13,11 @@ const getProjectFromHtmls = async (projectName, urls) => {
     try {
       for (let i = 0; i < urlsEnsuredArray.length; i += 1) {
         // eslint-disable-next-line no-await-in-loop
-        const bundleUrlsPiece = await getBundlesFromHtml(projectName, urlsEnsuredArray[i]);
+        const bundleUrlsPiece = await getBundlesFromHtml({
+          projectName,
+          url: urlsEnsuredArray[i],
+        });
+
         if (bundleUrlsPiece) {
           bundleUrls.push(...bundleUrlsPiece);
         }
@@ -25,7 +29,10 @@ const getProjectFromHtmls = async (projectName, urls) => {
 
     const uniqueBundleUrls = _.uniq(bundleUrls);
     try {
-      await extractFilesFromBundles(projectName, uniqueBundleUrls);
+      await extractFilesFromBundles({
+        bundleUrls: uniqueBundleUrls,
+        projectName,
+      });
     } catch (err) {
       error('Failed to extract files from bundles.');
       throw err;
@@ -37,4 +44,4 @@ const getProjectFromHtmls = async (projectName, urls) => {
   }
 };
 
-module.exports = getProjectFromHtmls;
+module.exports = recreateFromSourceMaps;
