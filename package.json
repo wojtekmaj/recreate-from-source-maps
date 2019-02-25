@@ -3,6 +3,10 @@
   "version": "0.0.1-alpha",
   "description": "Recreate a Webpack project just by providing an URL.",
   "main": "src/index.js",
+  "scripts": {
+    "test": "yarn run test-eslint",
+    "test-eslint": "eslint src/ --ext .jsx,.js"
+  },
   "author": {
     "name": "Wojciech Maj",
     "email": "kontakt@wojtekmaj.pl"
