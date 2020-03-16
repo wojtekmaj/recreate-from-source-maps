@@ -11,7 +11,7 @@ const extractBootstrapFromBundles = async ({
   const gettingBundles = makeProgress('Getting bundles');
   let scriptsContents;
   try {
-    scriptsContents = await Promise.all(bundleUrls.map(url => httpsGet(url, projectName)));
+    scriptsContents = await Promise.all(bundleUrls.map((url) => httpsGet(url, projectName)));
     gettingBundles.done();
   } catch (err) {
     gettingBundles.error(err);
@@ -34,7 +34,7 @@ const extractBootstrapFromBundles = async ({
   const downloadingSourceMaps = makeProgress('Downloading source maps');
   let sourceMapsContent;
   try {
-    sourceMapsContent = await Promise.all(sourceMapUrls.map(url => httpsGet(url, projectName)));
+    sourceMapsContent = await Promise.all(sourceMapUrls.map((url) => httpsGet(url, projectName)));
     downloadingSourceMaps.done();
   } catch (err) {
     downloadingSourceMaps.error(err);

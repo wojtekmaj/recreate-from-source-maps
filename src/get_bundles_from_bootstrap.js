@@ -95,7 +95,7 @@ const getBundlesFromBootstrap = async ({
 
   const bundleFilenames = chunkIds.map(chunkIdToBundleFilename);
   const bundleUrls = bundleFilenames.map(
-    bundleFilename => new URL(bundleFilename, sampleScriptUrl).toString(),
+    (bundleFilename) => new URL(bundleFilename, sampleScriptUrl).toString(),
   );
 
   return bundleUrls;

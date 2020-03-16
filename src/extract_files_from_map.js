@@ -17,7 +17,7 @@ const removeLinesStartingFrom = (text, startingFrom) => {
 
 const beginOfWebpackFooter = ['', '', '', '// WEBPACK FOOTER //'].join('\n');
 
-const extractFilesFromMap = textContent => new Promise((resolve) => {
+const extractFilesFromMap = (textContent) => new Promise((resolve) => {
   const json = JSON.parse(textContent);
 
   if (!json.sourcesContent) {
