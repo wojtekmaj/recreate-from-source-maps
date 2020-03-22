@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const mkdirp = require('mkdirp');
 const { error } = require('./log');
 
 module.exports = (files, projectName) => new Promise((resolve) => {
@@ -12,7 +11,7 @@ module.exports = (files, projectName) => new Promise((resolve) => {
     const filePath = path.join('results', projectName, safeFileName);
     const fileDir = path.dirname(filePath);
     if (!fs.existsSync(fileDir)) {
-      mkdirp.sync(fileDir);
+      fs.mkdirSync(fileDir, { recursive: true });
     }
 
     try {

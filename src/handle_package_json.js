@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const mkdirp = require('mkdirp');
 
 const appendDependenciesInPackageJson = ({
   projectName,
@@ -11,7 +10,7 @@ const appendDependenciesInPackageJson = ({
   const packageJsonPath = path.join('results', projectName, 'package.json');
   const packageJsonDir = 'results';
   if (!fs.existsSync(packageJsonDir)) {
-    mkdirp.sync(packageJsonDir);
+    fs.mkdirSync(packageJsonDir, { recursive: true });
   }
 
   let packageJson;

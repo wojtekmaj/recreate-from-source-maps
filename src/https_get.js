@@ -1,7 +1,6 @@
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const mkdirp = require('mkdirp');
 
 const cacheDirectory = '.cache';
 
@@ -10,7 +9,7 @@ const httpsGet = (url, projectName) => new Promise((resolve, reject) => {
   const cachePath = path.join(cacheDirectory, projectName, fileName);
   const cacheDir = path.dirname(cachePath);
   if (!fs.existsSync(cacheDir)) {
-    mkdirp.sync(cacheDir);
+    fs.mkdirSync(cacheDir, { recursive: true });
   }
   // Find request in cache, if exists
   try {
