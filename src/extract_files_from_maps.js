@@ -1,4 +1,3 @@
-
 const extractFilesFromMap = require('./extract_files_from_map');
 const { warning } = require('./log');
 
