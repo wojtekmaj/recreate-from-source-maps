@@ -4,7 +4,7 @@ Recreate a Webpack project just by providing an URL.
 ## How?
 RFSM looks for `<script>` tags in provided URLs. It attempts to find a source map for each file. These source maps contain information on each file included in your Webpack bundle, including their locations and unminified sources.
 
-Based on this information, project structure is recreated in `results` directory. A `package.json` file is also created, containing the list of all `dependencies` (no `devDependencies`) used in the project.
+Based on this information, the project structure is recreated in `results` directory. A `package.json` file is also created, containing the list of all `dependencies` (no `devDependencies`) used in the project.
 
 Of course, only publicly available information is used.
 
