@@ -1,5 +1,13 @@
 .DS_Store
 .cache
+.idea
+.vscode
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+dist
+coverage
 node_modules
 results
-run.js
+npm-debug.log
+yarn-error.log
