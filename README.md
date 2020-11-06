@@ -1,3 +1,5 @@
+[![CI](https://github.com/wojtekmaj/recreate-from-source-maps/workflows/CI/badge.svg)](https://github.com/wojtekmaj/recreate-from-source-maps/actions)
+
 # Recreate-From-Source-Maps
 Recreate a Webpack project just by providing an URL.
 
