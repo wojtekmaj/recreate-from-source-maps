@@ -17,10 +17,7 @@
     "lodash": "^4.17.19"
   },
   "devDependencies": {
-    "eslint": "~7.2.0",
+    "eslint": "~7.19.0",
     "eslint-config-wojtekmaj": "^0.5.0"
-  },
-  "resolutions": {
-    "rimraf@2.6.3": "^2.6.3"
   }
 }
