@@ -23,7 +23,7 @@ const extractFilesFromBundles = async ({
   const gettingBundles = makeProgress('Getting bundles');
   let scriptsContents;
   try {
-    scriptsContents = (await Promise.allSettled(allBundleUrls.map((url) => httpsGet(url, projectName)))).map(({value}) => value || "");
+    scriptsContents = (await Promise.allSettled(allBundleUrls.map((url) => httpsGet(url, projectName)))).map(({ value }) => value || '');
     gettingBundles.done();
   } catch (err) {
     gettingBundles.error(err);
@@ -46,7 +46,7 @@ const extractFilesFromBundles = async ({
   const downloadingSourceMaps = makeProgress('Downloading source maps');
   let sourceMapsContent;
   try {
-    sourceMapsContent = (await Promise.allSettled(sourceMapUrls.map((url) => httpsGet(url, projectName)))).map(({value}) => value || "");
+    sourceMapsContent = (await Promise.allSettled(sourceMapUrls.map((url) => httpsGet(url, projectName)))).map(({ value }) => value || '');
     downloadingSourceMaps.done();
   } catch (err) {
     downloadingSourceMaps.error(err);

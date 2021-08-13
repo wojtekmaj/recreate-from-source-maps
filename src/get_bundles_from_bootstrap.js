@@ -56,7 +56,7 @@ const getBundlesFromBootstrap = async ({
       return scriptSrc;
     }
 
-    return v => v;
+    return (v) => v;
   })();
 
   const chunkIds = await (async () => {
