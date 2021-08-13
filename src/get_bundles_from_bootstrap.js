@@ -26,7 +26,7 @@ const getBundlesFromBootstrap = async ({
 
     const __webpack_require__ = {}; // eslint-disable-line
     eval(webpackPublicPath); // eslint-disable-line no-eval
-    if (!__webpack_require__.p) {
+    if (__webpack_require__.p === undefined) {
       throw new Error('Failed to determine publicPath.');
     }
 
@@ -56,7 +56,7 @@ const getBundlesFromBootstrap = async ({
       return scriptSrc;
     }
 
-    return null;
+    return (v) => v;
   })();
 
   const chunkIds = await (async () => {
