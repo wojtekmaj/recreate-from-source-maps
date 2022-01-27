@@ -1,7 +1,4 @@
-const findSourceMapUrls = ({
-  bundleUrls,
-  scriptsContents,
-}) => {
+const findSourceMapUrls = ({ bundleUrls, scriptsContents }) => {
   const sourceMapUrls = [];
   scriptsContents.forEach((scriptContent, scriptIndex) => {
     const scriptUrl = bundleUrls[scriptIndex];

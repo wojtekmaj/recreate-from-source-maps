@@ -17,32 +17,33 @@ const removeLinesStartingFrom = (text, startingFrom) => {
 
 const beginOfWebpackFooter = ['', '', '', '// WEBPACK FOOTER //'].join('\n');
 
-const extractFilesFromMap = (textContent) => new Promise((resolve) => {
-  const json = JSON.parse(textContent);
+const extractFilesFromMap = (textContent) =>
+  new Promise((resolve) => {
+    const json = JSON.parse(textContent);
 
-  if (!json.sourcesContent) {
-    warnAboutSourceMapsWithoutSourcesContent();
-    resolve({});
-  }
-
-  // Extract all files
-  const files = {};
-  json.sources.forEach((rawSource, sourceIndex) => {
-    let fileName = rawSource.split('///').pop();
-    if (fileName.includes(' ')) {
-      ([fileName] = fileName.split(' '));
-    }
-    if (fileName.includes('?')) {
-      ([fileName] = fileName.split('?'));
+    if (!json.sourcesContent) {
+      warnAboutSourceMapsWithoutSourcesContent();
+      resolve({});
     }
 
-    const rawData = json.sourcesContent[sourceIndex];
-    const data = removeLinesStartingFrom(rawData, beginOfWebpackFooter);
+    // Extract all files
+    const files = {};
+    json.sources.forEach((rawSource, sourceIndex) => {
+      let fileName = rawSource.split('///').pop();
+      if (fileName.includes(' ')) {
+        [fileName] = fileName.split(' ');
+      }
+      if (fileName.includes('?')) {
+        [fileName] = fileName.split('?');
+      }
 
-    files[fileName] = data;
+      const rawData = json.sourcesContent[sourceIndex];
+      const data = removeLinesStartingFrom(rawData, beginOfWebpackFooter);
+
+      files[fileName] = data;
+    });
+
+    resolve(files);
   });
-
-  resolve(files);
-});
 
 module.exports = extractFilesFromMap;

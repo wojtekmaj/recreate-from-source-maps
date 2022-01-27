@@ -2,10 +2,7 @@ const httpsGet = require('./https_get');
 const findScriptUrls = require('./find_script_urls');
 const { makeProgress } = require('./log');
 
-const getBundlesFromHtml = async ({
-  projectName,
-  url,
-}) => {
+const getBundlesFromHtml = async ({ projectName, url }) => {
   const gettingHtml = makeProgress(`Getting source from URL ${url}`);
   let html;
   try {

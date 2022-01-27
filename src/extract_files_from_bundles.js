@@ -6,15 +6,16 @@ const writeFiles = require('./write_files');
 const extractNodeModules = require('./extract_node_modules');
 const { makeProgress } = require('./log');
 
-const extractFilesFromBundles = async ({
-  bundleUrls,
-  projectName,
-}) => {
+const extractFilesFromBundles = async ({ bundleUrls, projectName }) => {
   const extractBootstrap = makeProgress('Extracting Webpack bootstrap file');
   let allBundleUrls;
   try {
     allBundleUrls = await extractBootstrapFromBundles({ bundleUrls, projectName });
-    extractBootstrap.done(`Found ${bundleUrls.length === allBundleUrls.length ? 'no' : allBundleUrls.length - bundleUrls.length} extra bundles.`);
+    extractBootstrap.done(
+      `Found ${
+        bundleUrls.length === allBundleUrls.length ? 'no' : allBundleUrls.length - bundleUrls.length
+      } extra bundles.`,
+    );
   } catch (err) {
     extractBootstrap.error(err);
     throw err;
@@ -23,7 +24,9 @@ const extractFilesFromBundles = async ({
   const gettingBundles = makeProgress('Getting bundles');
   let scriptsContents;
   try {
-    scriptsContents = (await Promise.allSettled(allBundleUrls.map((url) => httpsGet(url, projectName)))).map(({ value }) => value || '');
+    scriptsContents = (
+      await Promise.allSettled(allBundleUrls.map((url) => httpsGet(url, projectName)))
+    ).map(({ value }) => value || '');
     gettingBundles.done();
   } catch (err) {
     gettingBundles.error(err);
@@ -37,7 +40,11 @@ const extractFilesFromBundles = async ({
       bundleUrls: allBundleUrls,
       scriptsContents,
     });
-    findingSourceMapUrls.done(`Found ${scriptsContents.length === sourceMapUrls.length ? 'all' : sourceMapUrls.length} sourceMapURLs.`);
+    findingSourceMapUrls.done(
+      `Found ${
+        scriptsContents.length === sourceMapUrls.length ? 'all' : sourceMapUrls.length
+      } sourceMapURLs.`,
+    );
   } catch (err) {
     findingSourceMapUrls.error(err);
     throw err;
@@ -46,7 +53,9 @@ const extractFilesFromBundles = async ({
   const downloadingSourceMaps = makeProgress('Downloading source maps');
   let sourceMapsContent;
   try {
-    sourceMapsContent = (await Promise.allSettled(sourceMapUrls.map((url) => httpsGet(url, projectName)))).map(({ value }) => value || '');
+    sourceMapsContent = (
+      await Promise.allSettled(sourceMapUrls.map((url) => httpsGet(url, projectName)))
+    ).map(({ value }) => value || '');
     downloadingSourceMaps.done();
   } catch (err) {
     downloadingSourceMaps.error(err);

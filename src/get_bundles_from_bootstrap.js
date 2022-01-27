@@ -1,23 +1,18 @@
 const httpsGet = require('./https_get');
 
-const getNLinesAfter = (text, after, numberOfLines) => text
-  .slice(text.indexOf(after))
-  .split('\n')
-  .slice(1, numberOfLines + 1)
-  .join('\n');
+const getNLinesAfter = (text, after, numberOfLines) =>
+  text
+    .slice(text.indexOf(after))
+    .split('\n')
+    .slice(1, numberOfLines + 1)
+    .join('\n');
 
-const getNthLine = (text, lineNumber) => text
-  .split('\n')
-  .slice(lineNumber, lineNumber + 1)[0];
+const getNthLine = (text, lineNumber) => text.split('\n').slice(lineNumber, lineNumber + 1)[0];
 
 const beginOfPublicPath = '\t// __webpack_public_path__';
 const beginOfFunction = '\t// script path function';
 
-const getBundlesFromBootstrap = async ({
-  bootstrap,
-  projectName,
-  sampleScriptUrl,
-}) => {
+const getBundlesFromBootstrap = async ({ bootstrap, projectName, sampleScriptUrl }) => {
   const hasJsonpScriptSrc = bootstrap.includes('jsonpScriptSrc');
   const hasScriptSrc = bootstrap.includes('script.src = __webpack_require__.p');
 
@@ -45,7 +40,10 @@ const getBundlesFromBootstrap = async ({
     if (hasScriptSrc) {
       const beginOfLine = 'script.src = __webpack_require__.p';
       const textToCut = 'script.src = ';
-      const scriptSrcLine = bootstrap.slice(bootstrap.indexOf(beginOfLine) + textToCut.length).split('\n').slice(0, 1)[0];
+      const scriptSrcLine = bootstrap
+        .slice(bootstrap.indexOf(beginOfLine) + textToCut.length)
+        .split('\n')
+        .slice(0, 1)[0];
 
       eval(`function scriptSrc(chunkId) { return ${scriptSrcLine} }`); // eslint-disable-line no-eval
       /* global scriptSrc */
@@ -64,7 +62,9 @@ const getBundlesFromBootstrap = async ({
       const jsonpScriptSrcBody = getNLinesAfter(bootstrap, beginOfFunction, 3);
       const configLine = getNthLine(jsonpScriptSrcBody, 1);
 
-      const config = JSON.parse(configLine.slice(configLine.indexOf('{'), configLine.indexOf('}') + 1));
+      const config = JSON.parse(
+        configLine.slice(configLine.indexOf('{'), configLine.indexOf('}') + 1),
+      );
       return Object.keys(config);
     }
 
@@ -94,8 +94,8 @@ const getBundlesFromBootstrap = async ({
   })();
 
   const bundleFilenames = chunkIds.map(chunkIdToBundleFilename);
-  const bundleUrls = bundleFilenames.map(
-    (bundleFilename) => new URL(bundleFilename, sampleScriptUrl).toString(),
+  const bundleUrls = bundleFilenames.map((bundleFilename) =>
+    new URL(bundleFilename, sampleScriptUrl).toString(),
   );
 
   return bundleUrls;

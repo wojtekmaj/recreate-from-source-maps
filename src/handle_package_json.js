@@ -1,12 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const appendDependenciesInPackageJson = ({
-  projectName,
-  property,
-  dependency,
-  version,
-}) => {
+const appendDependenciesInPackageJson = ({ projectName, property, dependency, version }) => {
   const packageJsonPath = path.join('results', projectName, 'package.json');
   const packageJsonDir = 'results';
   if (!fs.existsSync(packageJsonDir)) {
@@ -33,27 +28,21 @@ const appendDependenciesInPackageJson = ({
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, '  '));
 };
 
-const addDependencyInPackageJson = ({
-  projectName,
-  dependency,
-  version,
-}) => appendDependenciesInPackageJson({
-  projectName,
-  property: 'dependencies',
-  dependency,
-  version,
-});
+const addDependencyInPackageJson = ({ projectName, dependency, version }) =>
+  appendDependenciesInPackageJson({
+    projectName,
+    property: 'dependencies',
+    dependency,
+    version,
+  });
 
-const addDevDependencyInPackageJson = ({
-  projectName,
-  dependency,
-  version,
-}) => appendDependenciesInPackageJson({
-  projectName,
-  property: 'devDependencies',
-  dependency,
-  version,
-});
+const addDevDependencyInPackageJson = ({ projectName, dependency, version }) =>
+  appendDependenciesInPackageJson({
+    projectName,
+    property: 'devDependencies',
+    dependency,
+    version,
+  });
 
 module.exports = {
   addDependencyInPackageJson,

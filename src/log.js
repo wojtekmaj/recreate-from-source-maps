@@ -45,7 +45,7 @@ const makeProgress = (title) => {
   return {
     done: (doneMsg) => {
       if (done) {
-        throw new Error('You can\'t call done() twice');
+        throw new Error("You can't call done() twice");
       }
       success(doneMsg);
       actionsPending -= 1;
@@ -53,7 +53,7 @@ const makeProgress = (title) => {
     },
     error: (errorMsg) => {
       if (done) {
-        throw new Error('You can\'t call done() twice');
+        throw new Error("You can't call done() twice");
       }
       error(errorMsg);
       actionsPending -= 1;

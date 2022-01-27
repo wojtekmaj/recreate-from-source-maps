@@ -1,9 +1,11 @@
 [![CI](https://github.com/wojtekmaj/recreate-from-source-maps/workflows/CI/badge.svg)](https://github.com/wojtekmaj/recreate-from-source-maps/actions)
 
 # Recreate-From-Source-Maps
+
 Recreate a Webpack project just by providing an URL.
 
 ## How?
+
 RFSM looks for `<script>` tags in provided URLs. It attempts to find a source map for each file. These source maps contain information on each file included in your Webpack bundle, including their locations and unminified sources.
 
 Based on this information, the project structure is recreated in `results` directory. A `package.json` file is also created, containing the list of all `dependencies` (no `devDependencies`) used in the project.
@@ -11,9 +13,11 @@ Based on this information, the project structure is recreated in `results` direc
 Of course, only publicly available information is used.
 
 ## Why?
+
 While source maps make debugging way easier, they are often created when they shouldn't be. As a result, we may expose more information than we intend to. This project aims to demonstrated that in the most straightforward way.
 
 ## Usage
+
 **Note**: This is not an NPM package.
 
 ```js

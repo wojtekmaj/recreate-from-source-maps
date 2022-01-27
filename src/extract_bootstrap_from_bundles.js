@@ -4,14 +4,13 @@ const extractFilesFromMaps = require('./extract_files_from_maps');
 const getBundlesFromBootstrap = require('./get_bundles_from_bootstrap');
 const { info, makeProgress } = require('./log');
 
-const extractBootstrapFromBundles = async ({
-  bundleUrls,
-  projectName,
-}) => {
+const extractBootstrapFromBundles = async ({ bundleUrls, projectName }) => {
   const gettingBundles = makeProgress('Getting bundles');
   let scriptsContents;
   try {
-    scriptsContents = (await Promise.allSettled(bundleUrls.map((url) => httpsGet(url, projectName)))).map(({ value }) => value || '');
+    scriptsContents = (
+      await Promise.allSettled(bundleUrls.map((url) => httpsGet(url, projectName)))
+    ).map(({ value }) => value || '');
     gettingBundles.done();
   } catch (err) {
     gettingBundles.error(err);
@@ -25,7 +24,11 @@ const extractBootstrapFromBundles = async ({
       bundleUrls,
       scriptsContents,
     });
-    findingSourceMapUrls.done(`Found ${scriptsContents.length === sourceMapUrls.length ? 'all' : sourceMapUrls.length} sourceMapURLs.`);
+    findingSourceMapUrls.done(
+      `Found ${
+        scriptsContents.length === sourceMapUrls.length ? 'all' : sourceMapUrls.length
+      } sourceMapURLs.`,
+    );
   } catch (err) {
     findingSourceMapUrls.error(err);
     throw err;
@@ -34,7 +37,9 @@ const extractBootstrapFromBundles = async ({
   const downloadingSourceMaps = makeProgress('Downloading source maps');
   let sourceMapsContent;
   try {
-    sourceMapsContent = (await Promise.allSettled(sourceMapUrls.map((url) => httpsGet(url, projectName)))).map(({ value }) => value || '');
+    sourceMapsContent = (
+      await Promise.allSettled(sourceMapUrls.map((url) => httpsGet(url, projectName)))
+    ).map(({ value }) => value || '');
     downloadingSourceMaps.done();
   } catch (err) {
     downloadingSourceMaps.error(err);
