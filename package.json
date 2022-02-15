@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^3.0.0",
-    "follow-redirects": "^1.14.1",
+    "follow-redirects": "^1.14.8",
     "lodash": "^4.17.19"
   },
   "devDependencies": {
