@@ -303,6 +303,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "chalk@npm:5.1.2"
+  checksum: 804d7485e33531abe45b14e91026ceb5615974a8c04259ab0806f214a7666f6ea03e39ab124f7d5a0c78a83fda89005f236db3c5f10c2abe9ae875f7aa56bcb5
+  languageName: node
+  linkType: hard
+
 "color-convert@npm:^2.0.1":
   version: 2.0.1
   resolution: "color-convert@npm:2.0.1"
@@ -1681,7 +1688,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "recreate-from-source-maps@workspace:."
   dependencies:
-    chalk: ^3.0.0
+    chalk: ^5.1.2
     eslint: ^8.26.0
     eslint-config-wojtekmaj: ^0.7.1
     follow-redirects: ^1.14.1
